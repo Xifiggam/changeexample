@@ -12,7 +12,7 @@ import java.util.*;
 
 public abstract class Location extends GameObject {
     public Point point;
-    static double DIAMETER = 17;
+    static double DIAMETER = 30;
     Circle circle;
     Algorithm algorithm = new DefaultAlgorithm();
 
@@ -22,7 +22,6 @@ public abstract class Location extends GameObject {
     Map< String,Integer> resourceMap = new HashMap<>();
     Map< String,Integer> resourceProductionMap = new HashMap<>();
 
-    double deltaTimer = 0;
 
     public Location(Point point, String name) {
         super(name);
@@ -38,9 +37,8 @@ public abstract class Location extends GameObject {
 
     @Override
     public void update(double delta){
-        deltaTimer+=delta;
-        if(deltaTimer>1000){
-            deltaTimer=0;
+        if(delta>1000){
+            delta=0;
             Set< Map.Entry< String,Integer> > st = resourceProductionMap.entrySet();
             for (Map.Entry< String,Integer> me:st) {
                 addResources(me.getKey(), me.getValue());
@@ -54,4 +52,21 @@ public abstract class Location extends GameObject {
         algorithm.handleOrders(orders,this);
         circle.setDescription(mapToString(resourceMap),13);
     }
+
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+    }
+
+    public void removeRecipe(Recipe recipe) {
+        recipes.remove(recipe);
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
+    }
 }
+
